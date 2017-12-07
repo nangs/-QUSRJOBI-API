@@ -1,0 +1,87 @@
+DQUSI020000       DS
+      *                                             Qwc JOBI0200
+     D QUSBR01                 1      4B 0
+      *                                             Bytes Return
+     D QUSBA01                 5      8B 0
+      *                                             Bytes Avail
+     D QUSJN03                 9     18
+      *                                             Job Name
+     D QUSUN03                19     28
+      *                                             User Name
+     D QUSJNBR03              29     34
+      *                                             Job Number
+     D QUSIJID01              35     50
+      *                                             Int Job ID
+     D QUSJS05                51     60
+      *                                             Job Status
+     D QUSJT04                61     61
+      *                                             Job Type
+     D QUSJS06                62     62
+      *                                             Job Subtype
+     D QUSSN                  63     72
+      *                                             Subsys Name
+     D QUSRP01                73     76B 0
+      *                                             Run Priority
+     D QUSSPID00              77     80B 0
+      *                                             System Pool ID
+     D QUSCPUU00              81     84B 0
+      *                                             CPU Used
+     D QUSAIOR                85     88B 0
+      *                                             Aux IO Request
+     D QUSIT                  89     92B 0
+      *                                             Interact Trans
+     D QUSRT                  93     96B 0
+      *                                             Response Time
+     D QUSFT                  97     97
+      *                                             Function Type
+     D QUSFN15                98    107
+      *                                             Function Name
+     D QUSAJS                108    111
+      *                                             Active Job Stat
+     D QUSNDBLW              112    115B 0
+      *                                             Num DBase Lock Wts
+     D QUSNIMLW              116    119B 0
+      *                                             Num Internal Mch Lck Wts
+     D QUSNDBLW00            120    123B 0
+      *                                             Num Non DBase Lock Wts
+     D QUSTDBLW              124    127B 0
+      *                                             Wait Time DBase Lock Wts
+     D QUSTIMLW              128    131B 0
+      *                                             Wait Time Internal Mch L
+     D QUSNDBLW01            132    135B 0
+      *                                             Wait Time Non DBase Lock
+     D QUSERVED45            136    136
+      *                                             Reserved
+     D QUSCSPID              137    140B 0
+      *                                             Current System Pool ID
+     D QUSTC01               141    144B 0
+      *                                             Thread Count
+     DQUSEC            DS           116    inz
+     D QUSBPRV                 1      4B 0 inz(116)
+     D QUSBAVL                 5      8B 0 inz(0)
+     D QUSEI                   9     15
+     D QUSERVED               16     16
+     D QUSED01                17    116
+
+     D FormatName      S              8    Inz('JOBI0200')
+     D InJobName       S             26
+     D IntJobName      S             16
+     D JobName         S             26    Inz('*')
+     D Outcount        S              5  0
+     D ReceiveLen      S             10i 0 Inz(187)
+
+     c     *entry        Plist
+     c                   Parm                    InJobName
+     c                   If        %parms > 0
+     c                   Eval      JobName = InJobName
+     c                   Endif
+
+      * Call the api to get the information you want
+     C                   Call      'QUSRJOBI'
+     C                   Parm                    QusI020000
+     C                   Parm                    ReceiveLen
+     C                   Parm                    FormatName
+     C                   Parm                    JobName
+     C                   Parm                    IntJobName
+     C                   Parm                    QusEc
+     c                   Eval      *inlr = *on
